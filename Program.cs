@@ -1,4 +1,4 @@
-﻿namespace create_queue
+﻿namespace Creation
 {
     using Azure.Data.Wrappers;
 
