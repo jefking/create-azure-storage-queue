@@ -8,8 +8,8 @@
         {
             Console.WriteLine($"Creating Queue: {args[0]}");
             
-            var q = new StorageQueue(args[0]);
-            var result = q.Create().Result;
+            var q = new StorageQueue(args[0], args[1]);
+            var result = q.CreateIfNotExists().Result;
 
             Console.WriteLine($"Queue ({args[0]}) create: {result}.");
         }
