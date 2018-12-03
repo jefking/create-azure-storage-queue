@@ -6,4 +6,8 @@
     <RootNamespace>create_queue</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Azure.Data.Wrappers" Version="3.0.10" />
+  </ItemGroup>
+  
 </Project>
