@@ -12,12 +12,12 @@
 
             if (string.IsNullOrWhiteSpace(queueName))
             {
-                Console.Error("Please specify Queue Name: 'queue'.");
+                Console.WriteLine("Please specify Queue Name: 'queue'.");
                 return;
             }
             if (string.IsNullOrWhiteSpace(queueName))
             {
-                Console.Error("Please specify Connection String: 'connection'.");
+                Console.WriteLine("Please specify Connection String: 'connection'.");
                 return;
             }
 
