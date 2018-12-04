@@ -1,0 +1,88 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "queueName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Storage Queue to create."
+            }
+        },
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Storage Account (creates, if it doesn't exist)."
+            }
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "image": "jefking/create-queue:latest",
+        "cpuCores": "1.0",
+        "memoryInGb": "1.5",
+        "containerGroupName": "initialize-infrastructure",
+        "containerName": "create-queue"
+    },
+    "resources": [
+        {
+          "type": "Microsoft.Storage/storageAccounts",
+          "name": "[parameters('storageAccountName')]",
+          "apiVersion": "2016-01-01",
+          "location": "[variables('location')]",
+          "sku": {
+            "name": "Standard_LRS"
+          },
+          "kind": "Storage",
+          "properties": {
+            "encryption": {
+              "services": {
+                "blob": {
+                    "enabled": true
+                },
+                "queue":{
+                    "enabled": true
+                }
+              },
+              "keySource": "Microsoft.Storage"
+            }
+          }
+        },
+        {
+            "name": "[variables('containerGroupName')]",
+            "type": "Microsoft.ContainerInstance/containerGroups",
+            "apiVersion": "2018-02-01-preview",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]"
+            ],
+            "properties": {
+                "containers": [
+                    {
+                        "name": "[variables('containerName')]",
+                        "properties": {
+                            "image": "[variables('image')]",
+                            "environmentVariables":[
+                                {
+                                    "name": "queue",
+                                    "value": "[parameters('queueName')]"
+                                },
+                                {
+                                    "name": "connection",
+                                    "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2015-05-01-preview').key1)]"
+                                }
+                            ],
+                            "resources": {
+                                "requests": {
+                                    "cpu": "[variables('cpuCores')]",
+                                    "memoryInGb": "[variables('memoryInGb')]"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "restartPolicy": "OnFailure",
+                "osType": "Linux"
+            }
+        }
+    ]
+}
