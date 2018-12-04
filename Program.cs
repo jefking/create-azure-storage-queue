@@ -5,14 +5,28 @@
 
     public class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
-            Console.WriteLine($"Creating Queue: {args[0]}");
-            
-            var q = new StorageQueue(args[0], args[1]);
+            var queueName = System.Environment.GetEnvironmentVariable("queue");
+            var connectionString = System.Environment.GetEnvironmentVariable("connection");
+
+            if (string.IsNullOrWhiteSpace(queueName))
+            {
+                Console.Error("Please specify Queue Name: 'queue'.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(queueName))
+            {
+                Console.Error("Please specify Connection String: 'connection'.");
+                return;
+            }
+
+            Console.WriteLine($"Creating Queue: {queueName}");
+
+            var q = new StorageQueue(queueName, connectionString);
             var result = q.CreateIfNotExists().Result;
 
-            Console.WriteLine($"Queue ({args[0]}) create: {result}.");
+            Console.WriteLine($"Queue ({queueName}) create: {result}.");
         }
     }
 }
