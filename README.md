@@ -4,6 +4,8 @@
 </a>
 
 ## Build
+[![Build status](https://dev.azure.com/jefkin/oss/_apis/build/status/Create%20Storage%20Queue)](https://dev.azure.com/jefkin/oss/_build/latest?definitionId=4)
+
 ### Dotnet
 ```
 dotnet build
