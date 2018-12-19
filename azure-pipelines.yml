@@ -11,7 +11,12 @@ pool:
 
 variables:
   imageName: 'jefking/create-queue:$(build.buildId)'
+  imageLatest: 'jefking/create-queue:latest'
 
 steps:
 - script: docker build -t $(imageName) .
   displayName: 'docker build'
+- script: docker tag $(imageName) $(imageLatest)
+  displayName: 'docker tag latest'
+- script: docker push $(imageName) .
+  displayName: 'docker hub'
