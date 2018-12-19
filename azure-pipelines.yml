@@ -18,5 +18,5 @@ steps:
   displayName: 'docker build'
 - script: docker tag $(imageName) $(imageLatest)
   displayName: 'docker tag latest'
-- script: docker push $(imageName) .
+- script: docker push $(imageName)
   displayName: 'docker hub'
